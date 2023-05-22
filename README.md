@@ -27,7 +27,7 @@ sudo apt-get update && sudo apt-get install -y qemu-kvm libvirt-daemon-system li
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
-minikube start --driver=docker --memory 7168 --cpus 2
+minikube start --driver=docker --memory 6144 --cpus 2
 ```
 
 4. Install Nginx
@@ -74,7 +74,10 @@ sudo ufw enable
 sudo ufw status
 # GCloud Firewall Rules
 # gcloud compute firewall-rules delete kubernetes-api
-gcloud compute firewall-rules create kubernetes-api --allow=tcp:6443 --direction=ingress --enable-logging --description="Allow incoming traffic on Kubernetes API"
+gcloud compute firewall-rules create kubernetes-api --allow=tcp:8443 --direction=ingress --enable-logging --description="Allow incoming traffic on Kubernetes API"
+# Check ports usage
+sudo apt install net-tools
+sudo netstat -ntlp
 ```
 
 6. Use Kubeconfig
@@ -82,7 +85,7 @@ gcloud compute firewall-rules create kubernetes-api --allow=tcp:6443 --direction
 apiVersion: v1
 clusters:
   - cluster:
-      server: http://minikube:<PASSWORD>@<REMOTE_IP_ADDRESS>:6443
+      server: http://minikube:<PASSWORD>@<REMOTE_IP_ADDRESS>:8443
     name: minikube-cluster
 contexts:
   - context:
