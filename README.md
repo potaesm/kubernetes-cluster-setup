@@ -91,3 +91,6 @@ contexts:
 current-context: minikube-context
 kind: Config
 ```
+```bash
+export KUBECONFIG=${KUBECONFIG:-~/.kube/config}:/path/to/config.yaml
+```
