@@ -92,5 +92,6 @@ current-context: minikube-context
 kind: Config
 ```
 ```bash
+kubectl --kubeconfig=/path/to/config.yaml get nodes
 export KUBECONFIG=${KUBECONFIG:-~/.kube/config}:/path/to/config.yaml
 ```
