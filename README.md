@@ -58,8 +58,8 @@ events {
 }
 http {
     server {
-        listen 6443;
-        listen [::]:6443;
+        listen 8443;
+        listen [::]:8443;
         auth_basic_user_file /etc/nginx/.htpasswd;
         location / {
             proxy_pass https://<MINIKUBE_IP_ADDRESS>:8443;
@@ -79,6 +79,21 @@ http {
             proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-two;
         }
     }
+    server {
+        listen 443 ssl;
+        listen [::]:443 ssl;
+        server_name api.tbcadev.team;
+        ssl_certificate     /home/<USER_NAME>/cert.pem;
+        ssl_certificate_key /home/<USER_NAME>/privkey.pem;
+        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_ciphers         HIGH:!aNULL:!MD5;
+        location /app-one {
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-one;
+        }
+        location /app-two {
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-two;
+        }
+    }
 }
 ```
 
@@ -86,7 +101,7 @@ http {
 ```bash
 # Ubuntu Firewall
 sudo apt install ufw
-sudo ufw allow 6443/tcp
+sudo ufw allow 8443/tcp
 sudo ufw enable
 sudo ufw status
 # GCloud Firewall Rules
