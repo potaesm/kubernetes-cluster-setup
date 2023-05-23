@@ -90,12 +90,6 @@ http {
         ssl_certificate_key /home/<USER_NAME>/privkey.pem;
         ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
         ssl_ciphers         HIGH:!aNULL:!MD5;
-        location /app-one {
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-one;
-        }
-        location /app-two {
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-two;
-        }
     }
 }
 ```
