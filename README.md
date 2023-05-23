@@ -4,6 +4,7 @@
 - [Accessing a remote minikube from a local computer](https://faun.pub/accessing-a-remote-minikube-from-a-local-computer-fd6180dd66dd#:~:text=You%20can't%20access%20minikube,forward%20them%20to%20kube%2Dapiserver.)
 - [Setup Your Own Kubernetes Cluster with K3s](https://itnext.io/setup-your-own-kubernetes-cluster-with-k3s-b527bf48e36a)
 - [3 ways to connect to your K3s Kubernetes Cluster](https://headworq.org/en/how-to-connect-to-kubernetes/)
+- [NestJS Kubernetes Deployment](https://huseyinnurbaki.medium.com/nestjs-kubernetes-deployment-part-2-deployment-dad327dee631)
 
 1. Install Docker
 ```bash
@@ -36,6 +37,7 @@ sudo apt update
 sudo apt install nginx
 # Get minikube server address
 cat ~/.kube/config | grep server:
+minikube ip
 # Generate password for minikube
 sudo apt-get install apache2-utils -y
 sudo htpasswd -c /etc/nginx/.htpasswd minikube
@@ -45,6 +47,9 @@ sudo nano /etc/nginx/nginx.conf
 sudo nginx -t
 # Restart Nginx
 sudo systemctl restart nginx
+# Enable Minikube Nginx add-on
+minikube addons enable ingress
+minikube tunnel
 ```
 - Nginx Config
 ```conf
@@ -57,9 +62,19 @@ http {
         listen [::]:6443;
         auth_basic_user_file /etc/nginx/.htpasswd;
         location / {
-            proxy_pass https://<MINIKUBE_SERVER_ADDRESS>:8443;
+            proxy_pass https://<MINIKUBE_IP_ADDRESS>:8443;
             proxy_ssl_certificate /home/<USER_NAME>/.minikube/profiles/minikube/client.crt;
             proxy_ssl_certificate_key /home/<USER_NAME>/.minikube/profiles/minikube/client.key;
+        }
+    }
+    server {
+        listen 80;
+        listen [::]:80;
+        location /app-one {
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-one;
+        }
+        location /app-two {
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-two;
         }
     }
 }

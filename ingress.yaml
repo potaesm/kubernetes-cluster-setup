@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ctx-shf-ingress
+  namespace: development
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: MINIKUBE-ADDRESS-IP.nip.io
+      http:
+        paths:
+          - path: /my-app(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: my-app-svc
+                port:
+                  number: 3000
+# kubectl apply -f ingress.yaml
