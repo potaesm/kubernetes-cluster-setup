@@ -57,6 +57,8 @@ events {
     worker_connections 4096;
 }
 http {
+    default_type application/octet-stream;
+    # kubernetes api
     server {
         listen 8443;
         listen [::]:8443;
@@ -70,13 +72,24 @@ http {
     server {
         listen 80;
         listen [::]:80;
-        location /app-one {
-            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-one;
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-one;
+        # backend
+        location /my-backend-app-one {
+            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-one;
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>/my-backend-app-one;
         }
-        location /app-two {
-            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-two;
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-two;
+        location /my-backend-app-two {
+            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-two;
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>/my-backend-app-two;
+        }
+        # frontend
+        location / {
+            include /etc/nginx/mime.types;
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
         }
     }
     ssl_session_cache   shared:SSL:10m;
