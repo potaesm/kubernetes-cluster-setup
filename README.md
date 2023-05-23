@@ -79,10 +79,13 @@ http {
             proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-two;
         }
     }
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
     server {
         listen 443 ssl;
         listen [::]:443 ssl;
-        server_name api.tbcadev.team;
+        server_name         subdomain.domain.topleveldomain;
+        keepalive_timeout   70;
         ssl_certificate     /home/<USER_NAME>/cert.pem;
         ssl_certificate_key /home/<USER_NAME>/privkey.pem;
         ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
