@@ -18,5 +18,12 @@ spec:
                 name: my-app-svc
                 port:
                   number: 3000
+          - path: /(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: default-app-svc
+                port:
+                  number: 3001
       # host: MINIKUBE-ADDRESS-IP.nip.io
 # kubectl apply -f ingress.yaml
