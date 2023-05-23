@@ -71,10 +71,12 @@ http {
         listen 80;
         listen [::]:80;
         location /app-one {
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-one;
+            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-one;
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-one;
         }
         location /app-two {
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-two;
+            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/app-two;
+            proxy_pass http://<MINIKUBE_IP_ADDRESS>/app-two;
         }
     }
 }

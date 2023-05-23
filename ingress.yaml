@@ -9,8 +9,7 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: MINIKUBE-ADDRESS-IP.nip.io
-      http:
+    - http:
         paths:
           - path: /my-app(/|$)(.*)
             pathType: Prefix
@@ -19,4 +18,5 @@ spec:
                 name: my-app-svc
                 port:
                   number: 3000
+      # host: MINIKUBE-ADDRESS-IP.nip.io
 # kubectl apply -f ingress.yaml
