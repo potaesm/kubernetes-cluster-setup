@@ -82,9 +82,6 @@ http {
             proxy_pass http://<MINIKUBE_IP_ADDRESS>/my-backend-app-two;
         }
         # frontend
-        location ~ \.css {
-            add_header  Content-Type    text/css;
-        }
         location / {
             include /etc/nginx/mime.types;
             sendfile on;
