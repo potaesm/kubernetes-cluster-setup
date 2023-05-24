@@ -101,6 +101,7 @@ http {
             proxy_set_header Connection 'upgrade';
             proxy_set_header Host $host;
             proxy_cache_bypass $http_upgrade;
+            proxy_buffer_size 12k;
         }
     }
 }
