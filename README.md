@@ -69,9 +69,19 @@ http {
             proxy_ssl_certificate_key /home/<USER_NAME>/.minikube/profiles/minikube/client.key;
         }
     }
+    ssl_session_cache   shared:SSL:10m;
+    ssl_session_timeout 10m;
     server {
         listen 80;
-        listen [::]:80;
+        listen [::]:80 ipv6only=on;
+        listen 443 ssl;
+        listen [::]:443 ipv6only=on ssl;
+        keepalive_timeout   70;
+        ssl_certificate     /home/<USER_NAME>/cert.pem;
+        ssl_certificate_key /home/<USER_NAME>/privkey.pem;
+        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_ciphers ALL:!ADH:!EXPORT56:!aNULL:!MD5:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
+        ssl_prefer_server_ciphers on;
         # backend
         location /my-backend-app-one {
             # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-one;
@@ -92,18 +102,6 @@ http {
             proxy_set_header Host $host;
             proxy_cache_bypass $http_upgrade;
         }
-    }
-    ssl_session_cache   shared:SSL:10m;
-    ssl_session_timeout 10m;
-    server {
-        listen 443 ssl;
-        listen [::]:443 ssl;
-        server_name         subdomain.domain.topleveldomain;
-        keepalive_timeout   70;
-        ssl_certificate     /home/<USER_NAME>/cert.pem;
-        ssl_certificate_key /home/<USER_NAME>/privkey.pem;
-        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
-        ssl_ciphers         HIGH:!aNULL:!MD5;
     }
 }
 ```
