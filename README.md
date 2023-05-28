@@ -64,7 +64,7 @@ http {
         listen [::]:8443;
         auth_basic_user_file /etc/nginx/.htpasswd;
         location / {
-            proxy_pass https://<MINIKUBE_IP_ADDRESS>:8443;
+            proxy_pass https://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>:8443;
             proxy_ssl_certificate /home/<USER_NAME>/.minikube/profiles/minikube/client.crt;
             proxy_ssl_certificate_key /home/<USER_NAME>/.minikube/profiles/minikube/client.key;
         }
@@ -84,18 +84,18 @@ http {
         ssl_prefer_server_ciphers on;
         # backend
         location /my-backend-app-one {
-            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-one;
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>/my-backend-app-one;
+            # proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-one;
+            proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>/my-backend-app-one;
         }
         location /my-backend-app-two {
-            # proxy_pass http://<MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-two;
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>/my-backend-app-two;
+            # proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-two;
+            proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>/my-backend-app-two;
         }
         # frontend
         location / {
             include /etc/nginx/mime.types;
             sendfile on;
-            proxy_pass http://<MINIKUBE_IP_ADDRESS>/;
+            proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>/;
             proxy_http_version 1.1;
             proxy_set_header Upgrade $http_upgrade;
             proxy_set_header Connection 'upgrade';
