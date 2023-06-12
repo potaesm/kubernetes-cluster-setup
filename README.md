@@ -7,6 +7,7 @@
 - [NestJS Kubernetes Deployment](https://huseyinnurbaki.medium.com/nestjs-kubernetes-deployment-part-2-deployment-dad327dee631)
 
 1. Install Docker
+
 ```bash
 sudo apt update
 sudo apt install docker.io
@@ -15,6 +16,7 @@ sudo usermod -aG docker $USER && newgrp docker
 ```
 
 2. Install Minikube dependencies
+
 ```bash
 sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2 curl
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
@@ -25,6 +27,7 @@ sudo apt-get update && sudo apt-get install -y qemu-kvm libvirt-daemon-system li
 ```
 
 3. Install Minikube
+
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -32,6 +35,7 @@ minikube start --driver=docker --memory 6144 --cpus 2
 ```
 
 4. Install Nginx
+
 ```bash
 sudo apt update
 sudo apt install nginx
@@ -51,63 +55,9 @@ sudo systemctl restart nginx
 minikube addons enable ingress
 minikube tunnel
 ```
-- Nginx Config
-```conf
-events {
-    worker_connections 4096;
-}
-http {
-    default_type application/octet-stream;
-    # kubernetes api
-    server {
-        listen 8443;
-        listen [::]:8443;
-        auth_basic_user_file /etc/nginx/.htpasswd;
-        location / {
-            proxy_pass https://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>:8443;
-            proxy_ssl_certificate /home/<USER_NAME>/.minikube/profiles/minikube/client.crt;
-            proxy_ssl_certificate_key /home/<USER_NAME>/.minikube/profiles/minikube/client.key;
-        }
-    }
-    ssl_session_cache   shared:SSL:10m;
-    ssl_session_timeout 10m;
-    server {
-        listen 80;
-        listen [::]:80 ipv6only=on;
-        listen 443 ssl;
-        listen [::]:443 ipv6only=on ssl;
-        keepalive_timeout   70;
-        ssl_certificate     /home/<USER_NAME>/cert.pem;
-        ssl_certificate_key /home/<USER_NAME>/privkey.pem;
-        ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
-        ssl_ciphers ALL:!ADH:!EXPORT56:!aNULL:!MD5:RC4+RSA:+HIGH:+MEDIUM:+LOW:+SSLv3:+EXP;
-        ssl_prefer_server_ciphers on;
-        # backend
-        location /my-backend-app-one {
-            # proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-one;
-            proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>/my-backend-app-one;
-        }
-        location /my-backend-app-two {
-            # proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>.nip.io/my-backend-app-two;
-            proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>/my-backend-app-two;
-        }
-        # frontend
-        location / {
-            include /etc/nginx/mime.types;
-            sendfile on;
-            proxy_pass http://<SERVER_INTERNAL_IP_ADDRESS_OR_MINIKUBE_IP_ADDRESS>/;
-            proxy_http_version 1.1;
-            proxy_set_header Upgrade $http_upgrade;
-            proxy_set_header Connection 'upgrade';
-            proxy_set_header Host $host;
-            proxy_cache_bypass $http_upgrade;
-            proxy_buffer_size 12k;
-        }
-    }
-}
-```
 
 5. Config firewall
+
 ```bash
 # Ubuntu Firewall
 sudo apt install ufw
@@ -123,6 +73,7 @@ sudo netstat -ntlp
 ```
 
 6. Use Kubeconfig
+
 ```yaml
 apiVersion: v1
 clusters:
@@ -136,6 +87,7 @@ contexts:
 current-context: minikube-context
 kind: Config
 ```
+
 ```bash
 kubectl --kubeconfig=/path/to/config.yaml get nodes
 export KUBECONFIG=${KUBECONFIG:-~/.kube/config}:/path/to/config.yaml
