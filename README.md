@@ -31,6 +31,8 @@ sudo apt-get update && sudo apt-get install -y qemu-kvm libvirt-daemon-system li
 ```bash
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
+minikube delete --profile minikube
+rm /tmp/juju-*
 minikube start --driver=docker --memory 6144 --cpus 2
 ```
 
