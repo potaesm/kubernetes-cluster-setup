@@ -13,6 +13,8 @@ sudo apt update
 sudo apt install docker.io
 docker --version
 sudo usermod -aG docker $USER && newgrp docker
+sudo systemctl enable docker.service
+sudo systemctl enable containerd.service
 ```
 
 2. Install Minikube dependencies
