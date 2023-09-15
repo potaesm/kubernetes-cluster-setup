@@ -57,7 +57,7 @@ sudo nginx -t
 sudo systemctl restart nginx
 # Enable Minikube Nginx add-on
 minikube addons enable ingress
-minikube tunnel
+minikube tunnel &> /dev/null &
 ```
 
 5. Config firewall
