@@ -25,7 +25,7 @@ spec:
                 name: my-backend-app-two-svc
                 port:
                   number: 3000
-      # host: MINIKUBE-ADDRESS-IP.nip.io
+      # host: MINIKUBE-ADDRESS-IP.nip.io or LOAD-BALANCER-EXTERNAL-IP.nip.io
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -48,4 +48,5 @@ spec:
                 name: my-frontend-app-svc
                 port:
                   number: 3000
+      # host: MINIKUBE-ADDRESS-IP.nip.io or LOAD-BALANCER-EXTERNAL-IP.nip.io
 # kubectl apply -f ingress.yaml
